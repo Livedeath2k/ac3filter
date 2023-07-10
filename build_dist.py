@@ -38,11 +38,6 @@ parser.add_argument('--no-test',
   action='store_false',
   help='Do not run tests.')
 
-parser.add_argument('--no-opencandy',
-  dest='opencandy',
-  action='store_false',
-  help='Do not bundle OpenCandy.')
-
 args = parser.parse_args()
 
 ###########################################################
@@ -111,11 +106,6 @@ start_time = time.time()
 if args.ver != ver_test:
   ver = args.ver
   ver_file = make_filename_ver(ver)
-
-  if args.opencandy and not exists('OCKeys.iss'):
-    ans = raw_input('OpenCandy keys file (OCKeys.iss) not found. Continue without OpenCandy integration? (Y/n)?'.format(ver));
-    if ans != 'Y':
-      sys.exit(1)
 
   ans = raw_input('Are you sure you want to commit version {} (Y/n)?'.format(ver));
   if ans != 'Y':
@@ -225,9 +215,6 @@ if args.symbols:
 
 iss_defines = []
 iss_defines.append('/Dappver="%s"' % ver)
-if exists('ac3filter/OCKeys.iss') and args.opencandy:
-  iss_defines.append('/DOPENCANDY')
-
 iss_defines = ' '.join(iss_defines)
 run_at('ac3filter', '"%s" %s /o".." ac3filter.iss' % (innosetup, iss_defines))
 run_at('ac3filter', '"%s" %s /o".." ac3filter_lite.iss' % (innosetup, iss_defines))
